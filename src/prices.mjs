@@ -48,7 +48,7 @@ function createApp(database) {
     if (
       date &&
       isMonday(Temporal.PlainDate.from(date.toISOString())) &&
-      !isHoliday(date)
+      !isHoliday(Temporal.PlainDate.from(date.toISOString()))
     ) {
       reduction = 35;
     }
@@ -62,13 +62,7 @@ function createApp(database) {
   function isHoliday(date) {
     const holidays = database.getHolidays();
     for (let row of holidays) {
-      let holiday = new Date(row.holiday);
-      if (
-        date &&
-        date.getFullYear() === holiday.getFullYear() &&
-        date.getMonth() === holiday.getMonth() &&
-        date.getDate() === holiday.getDate()
-      ) {
+      if (date && date.equals(row.holiday)) {
         return true;
       }
     }
